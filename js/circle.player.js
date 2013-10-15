@@ -94,7 +94,7 @@ CirclePlayer.prototype = {
 			}
 			$(this).jPlayer("setMedia", self.media);
 			// Disabled seek functionality
-			//self._initCircleControl();
+			self._initCircleControl();
 		});
 
 		this.player.bind($.jPlayer.event.play + this.eventNamespace, function(event) {

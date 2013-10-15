@@ -74,8 +74,8 @@ body {
 } 
 
 .cp-circle-control {
-	/* cursor:pointer; */
-	cursor: default; /* for disabled seek */
+	cursor:pointer; /* for disabled seek */
+	/* cursor: default; */ 
 }
 
 .cp-buffer-holder,
