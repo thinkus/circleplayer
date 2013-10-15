@@ -93,7 +93,8 @@ CirclePlayer.prototype = {
 				self.audio = $(this).data("jPlayer").htmlElement.audio;
 			}
 			$(this).jPlayer("setMedia", self.media);
-			self._initCircleControl();
+			// Disabled seek functionality
+			//self._initCircleControl();
 		});
 
 		this.player.bind($.jPlayer.event.play + this.eventNamespace, function(event) {
