@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>SVG Path</title>
+		<style>
+			body { margin: 0; }
+			#svg path {  }
+			#svg { border: 1px solid #0ff; }
+		</style>
+	</head>
+	<body>
+		<clipPath id="progress-ellipse">
+		
+		</clipPath>
+		<svg id="svg" class="viewport" width="400" height="400" viewbox="0 0 400 400" preserveAspectRation="xMinYMin meet" xmlns="http://www.w3.org/2000/svg"></svg>
+		<script>
+			prog = {
+				svg: document.getElementById('svg'),
+				clip: document.getElementById('progress-ellipse'),
+				progressLoaded: 80,
+				totalProgress: 100,
+				progressLoader: null,
+				
+				cx: 200,
+				cy: 200,
+				a: 0,
+				x: 0, 
+				y: 0,
+				r: 100,
+				s: 0,
+				z: ' z',
+				
+				init: function() {
+					
+					for (var i = 0, count = 67; i <= count; i++) {
+						prog.progressLoaded = i;
+						
+						prog.a = parseInt((prog.progressLoaded / prog.totalProgress) * 360);
+						prog.x = prog.r * Math.sin(Math.PI * prog.a / 180);
+						prog.y = -prog.r * Math.cos(Math.PI * prog.a / 180) + prog.r;
+						
+						//console.log(prog.x, prog.y, prog.a);
+						if (prog.progressLoaded > 50) prog.s = 1;
+						
+						if (prog.progressLoaded == prog.totalProgress) {
+							prog.progressLoader = prog.createSVG('circle', 
+							{ 
+								id: 'circle', 
+								cx: prog.cx,
+								cy: prog.cy, 
+								r: prog.r
+							});
+						} else {
+							prog.progressLoader = prog.createSVG('path', 
+							{ 
+								id: 'ellipse', 
+								d: 'M' + prog.cx + ',' + prog.cy + ' v-' + prog.r + ' a' + prog.r + ',' + prog.r + ' 1 ' + prog.s + ', 1 ' + prog.x + ',' + prog.y + prog.z,
+								fill: 'red', 
+								stroke: 'black', 
+								'stroke-width': 4
+							});
+						}
+							//prog.pathInterval = setInterval(function() { prog.pathAnimation(); }, 80);
+						
+						
+						//prog.ellipseArr.push({ r: prog.r, s: prog.s, x: prog.x, y: prog.y, z: prog.z });
+						
+					}
+					
+					prog.svg.appendChild(prog.progressLoader);
+				},
+				
+/*
+				pathAnimation: function() {
+					if (prog.pathIndex < prog.totalProgress) {
+						//console.log(prog.ellipseArr);
+						prog.pathIndex++
+					} else {
+						clearInterval(prog.pathInterval);
+					}
+				},
+*/
+				
+				createSVG: function(tag, attrs) {
+					var obj = document.createElementNS('http://www.w3.org/2000/svg', tag);
+					
+					for (var k in attrs) {
+						obj.setAttribute(k, attrs[k]);
+					}
+					return obj;
+				}
+			};
+			
+			window.onload = prog.init;			
+		</script>
+    </body>
+</html>
