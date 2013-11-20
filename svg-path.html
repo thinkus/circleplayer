@@ -20,22 +20,72 @@
 			prog = {
 				svg: document.getElementById('svg'),
 				clip: document.getElementById('progress-ellipse'),
-				progressLoaded: null,
+				circle: document.getElementById('ellipse'),
+				progressLoaded: 0,
 				totalProgress: 100,
 				progressLoader: null,
-				progIndex: null,
+				animateProgress: null,
 				
 				cx: 200,
 				cy: 200,
 				a: 0,
-				x: 0, 
+				x: 0,
 				y: 0,
 				r: 100,
 				s: 0,
-				z: ' z',
 				
 				init: function() {
-					
+					prog.animateProgress = setInterval(function() {
+						if (prog.progressLoaded < prog.totalProgress) {
+							prog.a = parseInt((prog.progressLoaded / prog.totalProgress) * 360);
+							prog.x = prog.r * Math.sin(Math.PI * prog.a / 180);
+							prog.y = -prog.r * Math.cos(Math.PI * prog.a / 180) + prog.r;
+							
+							//console.log(prog.x, prog.y, prog.a);
+							if (prog.progressLoaded > 50) prog.s = 1;
+							
+							prog.progressLoader = prog.createSVG('path', 
+							{ 
+								id: 'ellipse', 
+								d: 'M' + prog.cx + ',' + prog.cy + ' v-' + prog.r + ' a' + prog.r + ',' + prog.r + ' 1 ' + prog.s + ', 1 ' + prog.x + ',' + prog.y + ' z',
+								fill: 'red', 
+								stroke: 'transparent', 
+								'stroke-width': 0
+							});
+							
+							prog.progressLoaded+=5;
+						}
+						
+						if (prog.progressLoaded >= prog.totalProgress) {
+							console.log('done');
+							prog.circle.removeAttribute('clip-path');
+							clearInterval(prog.animateProgress);
+						} else {
+							//var prev = prog.clip.childNodes[0];
+							//var next = prog.clip.childNodes[1];\
+							//var targChild = prog.progressLoaded - 1;
+							//var prevChild = prog.progressLoaded - 2;
+							//child = prog.clip.childNodes;
+							//console.log(prog.progressLoaded);
+							//console.log(prog.progressLoader);
+							//if (prog.progressLoaded == 1) {
+								prog.clip.appendChild(prog.progressLoader);
+							//} else {
+								//prog.progressLoader.setAttribute('d', 'M' + prog.cx + ',' + prog.cy + ' v-' + prog.r + ' a' + prog.r + ',' + prog.r + ' 1 ' + prog.s + ', 1 ' + prog.x + ',' + prog.y + ' z');
+							//}
+							
+
+								//prog.clip.removeChild(child[prevChild]);
+							/* } else { */
+								//prog.clip.replaceChild(child[targChild], child[prevChild]);
+							/* } */
+								//prog.clip.replaceChild(next, prev);
+								//console.log('target: ', child[targChild]);
+								//console.log('prev: ', child[prevChild]);
+						}
+						
+					}, 100);
+/*
 					for (var i = 0, count = 70; i <= count; i++) {
 						prog.progressLoaded = i;
 						
@@ -62,9 +112,41 @@
 					} else {
 						prog.clip.appendChild(prog.progressLoader);
 					}
-
-					
+*/					
 				},
+				
+/*
+				animateProgress: setInterval(function() {
+					console.log('progress');
+					if (prog.progressLoaded < prog.totalProgress) {
+						prog.a = parseInt((prog.progressLoaded / prog.totalProgress) * 360);
+						prog.x = prog.r * Math.sin(Math.PI * prog.a / 180);
+						prog.y = -prog.r * Math.cos(Math.PI * prog.a / 180) + prog.r;
+						
+						//console.log(prog.x, prog.y, prog.a);
+						if (prog.progressLoaded > 50) prog.s = 1;
+						
+						prog.progressLoader = prog.createSVG('path', 
+						{ 
+							id: 'ellipse', 
+							d: 'M' + prog.cx + ',' + prog.cy + ' v-' + prog.r + ' a' + prog.r + ',' + prog.r + ' 1 ' + prog.s + ', 1 ' + prog.x + ',' + prog.y + ' z',
+							fill: 'red', 
+							stroke: 'transparent', 
+							'stroke-width': 0
+						});
+						
+						prog.progressLoaded++;
+					}
+					
+					if (prog.progressLoaded == prog.totalProgress -1) {
+						document.getElementById('ellipse').setAttribute('clip-path', '');
+						clearInterval(this);
+					} else {
+						prog.clip.appendChild(prog.progressLoader);
+					}
+					
+				}, 200),
+*/
 								
 				createSVG: function(tag, attrs) {
 					var obj = document.createElementNS('http://www.w3.org/2000/svg', tag);
